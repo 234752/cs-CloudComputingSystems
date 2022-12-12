@@ -37,6 +37,7 @@ public class Editor
             
             List<JToken> tokensToBeYeeted = new List<JToken>();
             var rating = (int)reviews.AsQueryable().Single(t => t.SelectToken("news_id").ToString() == name).SelectToken("rating");
+            var criteria = reviews.AsQueryable().Single(t => t.SelectToken("news_id").ToString() == name).SelectToken("criteria");
             //Yeet that
             tokensToBeYeeted.Add(story.SelectToken("meta_data")!);
             tokensToBeYeeted.Add(story.SelectToken("canonical_link")!);
@@ -56,8 +57,9 @@ public class Editor
             {
                 token.Parent.Remove();
             }
-            story.Add(new JProperty("news_id", name));
+            //story.Add(new JProperty("news_id", name));
             story.Add(new JProperty("rating", rating));
+            story.Add(new JProperty("criteria", criteria));
             string updatedJsonString = story.ToString();
             //File.WriteAllText(@"data\" + name + ".json", updatedJsonString);
 
@@ -68,7 +70,9 @@ public class Editor
             //}
             stories.Add(story);
         }
-        using (StreamWriter file = File.CreateText(@"data\OneFileToRuleThemAll.json"))
+        
+        
+        using (StreamWriter file = File.CreateText(@"data3\initial.json"))
         using (JsonTextWriter writer = new JsonTextWriter(file))
         {
             stories.WriteTo(writer);
